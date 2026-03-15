@@ -1,4 +1,4 @@
-`timescale 100us/1us
+`timescale 1ns/100ps
 
 module tb_top;
 
@@ -20,7 +20,7 @@ top_squaregenerator uut (
 // Clock generation
 initial begin
     clk = 0;
-    forever #10000000 clk = ~clk; // 100 MHz clock (10 ns period)
+    forever #10 clk = ~clk; // 100 MHz clock (10 ns period)
 end
 
 // Test sequence
@@ -35,28 +35,28 @@ initial begin
     #100; // Wait for 100 ns
     // Simulate button presses to set frequency to 1234567 Hz
     // Set digit 0 to 7
-    next_digit = 1; #20; // Move to digit 0 
-    next_digit = 0; btn_up = 1; #10; btn_up = 0; #10; // Increment digit 0 to 7
+    next_digit = 1; #20000000; // Move to digit 0 
+    next_digit = 0; btn_up = 1; #20000000; btn_up = 1; btn_down = 1; #20000000; btn_down = 0; btn_up = 0; #20000000; // Increment digit 0 to 7
     // Set digit 1 to 6
-    next_digit = 1; #10; // Move to digit 1
-    next_digit = 0; btn_up = 1; #10; btn_up = 0; #10; // Increment digit 1 to 6
+    next_digit = 1; #20000000; // Move to digit 1
+    next_digit = 0; btn_up = 1; #20000000; btn_up = 0; #20000000; // Increment digit 1 to 6
     // Set digit 2 to 5
-    next_digit = 1; #10; // Move to digit 2
-    next_digit = 0; btn_up = 1; #10; btn_up = 0; #10; // Increment digit 2 to 5
+    next_digit = 1; #20000000; // Move to digit 2
+    next_digit = 0; btn_up = 1; #20000000; btn_up = 0; #20000000; btn_up = 1; #20000000; btn_up = 0; #20000000; // Increment digit 2 to 5
     // Set digit 3 to 4
-    next_digit = 1; #10; // Move to digit 3
-    next_digit = 0; btn_up = 1; #10; btn_up = 0; #10; // Increment digit 3 to 4
+    next_digit = 1; #20000000; // Move to digit 3
+    next_digit = 0; btn_up = 1; #20000000; btn_up = 0; #20000000; // Increment digit 3 to 4
     // Set digit 4 to 3
-    next_digit = 1; #10; // Move to digit 4
-    next_digit = 0; btn_up = 1; #10; btn_up = 0; #10; // Increment digit 4 to 3
+    next_digit = 1; #20000000; // Move to digit 4
+    next_digit = 0; btn_up = 1; #20000000; btn_up = 0; #20000000; btn_up = 1; #20000000; btn_up = 0; #20000000; // Increment digit 4 to 3
     // Set digit 5 to 2
-    next_digit = 1; #10; // Move to digit 5     
-    next_digit = 0; btn_up = 1; #10; btn_up = 0; #10; // Increment digit 5 to 2
+    next_digit = 1; #20000000; // Move to digit 5     
+    next_digit = 0; btn_up = 1; #20000000; btn_up = 0; #20000000; // Increment digit 5 to 2
     // Set digit 6 to 1
-    next_digit = 1; #10; // Move to digit 6
-    next_digit = 0; btn_up = 1; #10; btn_up = 0; #10; // Increment digit 6 to 1
+    next_digit = 1; #20000000; // Move to digit 6
+    next_digit = 0; btn_up = 1; #20000000; btn_up = 0; #20000000; btn_up = 1; btn_down = 1; #20000000; btn_down = 0; btn_up = 0; #20000000; btn_up = 1; #20000000; btn_up = 0; #20000000; // Increment digit 6 to 1
     // Wait for some time to observe the output
-    #1000; // Wait for 1 us
+    #100; // Wait for 1 us
     $finish; // End the simulation      
 
     $monitor("Time: %0t, square_out: %b", $time, square_out); // Monitor the output signal

@@ -6,7 +6,7 @@ module top_squaregenerator (
     output square_out
 );
 
-wire [3:0] digits [6:0]; // 7 BCD digits for frequency input
+reg [3:0] digits [6:0]; // 7 BCD digits for frequency input
 
 btn_controller button_controller(
     .clk(clk),

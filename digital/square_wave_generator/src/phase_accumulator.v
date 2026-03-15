@@ -4,7 +4,7 @@ module phase_accumulator (
     output reg square_out
 );
 
-reg [31:0] phase_acc = 0; // Phase accumulator
+reg [31:0] phase_acc; // Phase accumulator
 
 initial begin
     phase_acc = 0; // Initialize phase accumulator to 0
