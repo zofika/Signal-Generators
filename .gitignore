@@ -2,3 +2,4 @@
 *.vcd
 *.out
 build/
+digital/square_wave_generator/sim/top_squaregenerator.vcd
