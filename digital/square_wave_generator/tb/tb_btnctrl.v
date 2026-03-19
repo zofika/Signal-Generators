@@ -1,20 +1,19 @@
 `timescale 1ns/100ps
 
-module tb_top;
-
+module tb_btnctrl;
 reg clk;
 reg btn_up;
 reg btn_down;
 reg next_digit;
-wire square_out;    
+wire [3:0] bcd_digits [6:0];
 
-// Instantiate the top module
-top_squaregenerator uut (
+// Instantiate the button controller
+btn_controller uut (
     .clk(clk),
     .btn_up(btn_up),
     .btn_down(btn_down),
     .next_digit(next_digit),
-    .square_out(square_out)
+    .bcd_digits(bcd_digits)
 );
 
 // Clock generation
@@ -25,9 +24,8 @@ end
 
 // Test sequence
 initial begin
-    $dumpfile("sim/top_squaregenerator.vcd"); // Create a VCD file for waveform viewing
-    $dumpvars(0, tb_top); // Dump all variables in the testbench
-
+    $dumpfile("sim/btn_controller.vcd"); // Create a VCD file for
+    $dumpvars(0, tb_btnctrl); // Dump all variables in the testbench
     // Initialize inputs
     btn_up = 0;
     btn_down = 0;
@@ -35,11 +33,10 @@ initial begin
     #100; // Wait for 100 ns
     // Simulate button presses to set frequency to 1234567 Hz
     // Set digit 0 to 7
-    // Digit 0 
     next_digit = 0; btn_up = 1; #20000000; btn_up = 1; btn_down = 1; #20000000; btn_down = 0; btn_up = 0; #20000000; // Increment digit 0 to 7
     // Set digit 1 to 6
     next_digit = 1; #20000000; // Move to digit 1
-    next_digit = 0; btn_up = 1; #20000000; btn_up = 0; #20000000; // Increment digit 1 to 6
+    next_digit = 0; btn_up = 1; #20000000; btn_up = 0; #20000000; // Increment digit 1 to 1
     // Set digit 2 to 5
     next_digit = 1; #20000000; // Move to digit 2
     next_digit = 0; btn_up = 1; #20000000; btn_up = 0; #20000000; btn_up = 1; #20000000; btn_up = 0; #20000000; // Increment digit 2 to 5
@@ -53,13 +50,11 @@ initial begin
     next_digit = 1; #20000000; // Move to digit 5     
     next_digit = 0; btn_up = 1; #20000000; btn_up = 0; #20000000; // Increment digit 5 to 2
     // Set digit 6 to 1
-    next_digit = 1; #20000000; // Move to digit 6
-    next_digit = 0; btn_up = 1; #20000000; btn_up = 0; #20000000; btn_up = 1; btn_down = 1; #20000000; btn_down = 0; btn_up = 0; #20000000; btn_up = 1; #20000000; btn_up = 0; #20000000; // Increment digit 6 to 1
+    next_digit = 1; #20000000; // Move to digit 6  
+    next_digit = 0; btn_up = 1; #20000000; btn_up = 0; #20000000; // Increment digit 6 to 1
+    next_digit = 0; btn_up = 1; #20000000; btn_up = 0; #20000000; // Increment digit 6 to 1
     // Wait for some time to observe the output
-    #10000000; // Wait for 1 us
-    $finish; // End the simulation      
-
-    $monitor("Time: %0t, square_out: %b", $time, square_out); // Monitor the output signal
+    #100; // Wait for 1 us
+    $finish; // End the simulation
 end
-    
 endmodule
