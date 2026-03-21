@@ -19,7 +19,7 @@ btn_controller uut (
 // Clock generation
 initial begin
     clk = 0;
-    forever #10 clk = ~clk; // 100 MHz clock (10 ns period)
+    forever #5 clk = ~clk; // 100 MHz clock (10 ns period)
 end
 
 // Test sequence

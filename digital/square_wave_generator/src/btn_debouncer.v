@@ -20,7 +20,7 @@ always @(posedge clk) begin
     end else begin
         // If the button state is different, start incrementing the counter
         counter <= counter + 1;
-        if (counter == 100000) begin // If the button has been in the new state for 10 ms
+        if (counter == 1000000) begin // If the button has been in the new state for 10 ms
             btn_state <= noisy_btn_in; // Update the stable button state
             debounced_btn_out <= noisy_btn_in; // Update the debounced output
             counter <= 0; // After all, reset the counter

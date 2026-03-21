@@ -4,3 +4,4 @@
 build/
 digital/square_wave_generator/sim/top_squaregenerator.vcd
 sim/
+/digital/square_wave_generator/sim
