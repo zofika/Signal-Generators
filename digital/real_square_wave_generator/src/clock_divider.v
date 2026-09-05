@@ -2,6 +2,7 @@ module clock_divider (
     input clk,
     input rstn,
     input [19:0] freq_value, // Frequency value in Hz
+    
     output reg signal_out
 );
 reg [25:0] counter; // Counter for clock division
