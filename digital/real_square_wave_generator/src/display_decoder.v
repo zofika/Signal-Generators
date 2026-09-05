@@ -1,43 +1,14 @@
-module display_driver (
+module display_decoder (
     input clk,
     input nrst,
-    input [19:0] freq_value,
+    input [3:0] digits [6:0], // 7 BCD digits (4 bits each)
 
     output reg [6:0] seg,
     output reg [6:0] an
 );
 
 reg [2:0] current_digit; // Current digit index (0-6)
-reg [3:0] digits [6:0]; // Data to be displayed on the 7-segment display
-
-reg [19:0] temp_value; // Temporary variable for BCD conversion
 reg [16:0] refresh_counter; // Counter for refreshing the display
-
-// ============================================================
-// Binary -> decimal digits
-// ============================================================
-
-always @(posedge clk or negedge nrst) begin
-    if (!nrst) begin
-        // Reset the digits to 0 on reset
-        digits[0] <= 4'd0;
-        digits[1] <= 4'd0;
-        digits[2] <= 4'd0;
-        digits[3] <= 4'd0;
-        digits[4] <= 4'd0;
-        digits[5] <= 4'd0;
-        digits[6] <= 4'd0;
-    end else begin
-        // Convert freq_value to BCD and store in digits array 
-        integer i; 
-        temp_value = freq_value; 
-        for (i = 0; i < 7; i = i + 1) begin 
-            digits[i] <= temp_value % 10; // Get the least significant digit 
-            temp_value = temp_value / 10; // Remove the least significant digit 
-        end
-    end
-end
-
 
 // ============================================================
 // Display refresh
