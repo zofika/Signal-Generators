@@ -33,14 +33,14 @@ always @(posedge clk or negedge nrst) begin
                 digits[current_digit] <= 4'd0; // Wrap around to 0 if it exceeds 9
         end
 
-        if (btn_down) begin
+        else if (btn_down) begin
             if (digits[current_digit] > 4'd0)
                 digits[current_digit] <= digits[current_digit] - 1'b1; // Decrement the current digit
             else
                 digits[current_digit] <= 4'd9; // Wrap around to 9 if it goes below 0
         end
 
-        if (next_digit) begin
+        else if (next_digit) begin
             if (current_digit == 3'd6)
                 current_digit <= 3'd0; // Wrap around to the first digit if it exceeds the last digit
             else
