@@ -9,7 +9,11 @@ reg btn_down;
 reg next_digit;
 
 wire [3:0] out_digits [6:0]; // 7 BCD digits for frequency input
+
 wire out_signal;
+wire seg [6:0];
+wire an [6:0];
+
 wire [19:0] freq_value;
 
 reg square_wave_out;
@@ -43,7 +47,7 @@ end
 initial begin
 
     // VCD
-    $dumpfile("sim/top_btnctrl2bcd2clkdiv.vcd");
+    $dumpfile("sim/top_squaregenerator.vcd");
     $dumpvars(0, tb_top);
 
     // Initial values

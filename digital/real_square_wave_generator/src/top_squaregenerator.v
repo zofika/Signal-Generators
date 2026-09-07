@@ -4,7 +4,10 @@ module top_squaregenerator (
     input btn_up,
     input btn_down,
     input next_digit,
+    
     output out_signal,
+    output [6:0] seg,
+    output [6:0] an,
 
     output [3:0] out_digits [6:0], // 7 BCD digits for frequency input  
     output [19:0] out_freq_value
@@ -33,6 +36,14 @@ clock_divider clk_div_inst (
     .rstn(rstn),
     .freq_value(freq_value),
     .signal_out(out_signal)
+);
+
+display_decoder display_decoder_inst (
+    .clk(clk),
+    .nrst(rstn),
+    .digits(digits),
+    .seg(seg),
+    .an(an)
 );
 
 assign out_freq_value = freq_value;
