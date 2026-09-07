@@ -37,5 +37,4 @@ always @(posedge clk or negedge rstn) begin
         end
     end
 
-
 endmodule

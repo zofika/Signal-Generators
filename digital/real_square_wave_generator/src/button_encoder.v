@@ -48,4 +48,5 @@ always @(posedge clk or negedge nrst) begin
         end
     end
 end
+
 endmodule

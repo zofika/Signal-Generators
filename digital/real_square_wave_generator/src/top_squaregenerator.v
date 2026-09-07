@@ -13,7 +13,7 @@ module top_squaregenerator (
 wire [3:0] digits [6:0]; // 7 BCD digits for frequency input
 wire [19:0] freq_value; // 20-bit frequency value
 
-button_encoder button_encoder_inst (
+button_controller button_controller_inst (
     .clk(clk),
     .nrst(rstn),
     .btn_up(btn_up),
@@ -23,6 +23,7 @@ button_encoder button_encoder_inst (
 );
 
 bcd2dec_converter bcd2dec_inst (
+    .nrst(rstn),
     .digits(digits),
     .freq_value(freq_value)
 );
