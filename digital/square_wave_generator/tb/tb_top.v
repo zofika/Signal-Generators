@@ -1,64 +1,243 @@
-`timescale 1ns/100ps
+`timescale 1ns/1ps
 
 module tb_top;
 
 reg clk;
+reg nrst;
 reg btn_up;
 reg btn_down;
 reg next_digit;
-wire square_out;    
 
-// Instantiate the top module
+wire [3:0] out_digits [6:0]; // 7 BCD digits for frequency input
+
+wire out_signal;
+wire seg [6:0];
+wire an [6:0];
+
+wire [19:0] freq_value;
+
+reg square_wave_out;
+reg [19:0] temp_freq_value;
+
+reg [3:0] dig0;
+reg [3:0] dig1;
+reg [3:0] dig2;
+reg [3:0] dig3;
+reg [3:0] dig4;
+reg [3:0] dig5;
+reg [3:0] dig6;
+
 top_squaregenerator uut (
     .clk(clk),
+    .rstn(nrst),
     .btn_up(btn_up),
     .btn_down(btn_down),
     .next_digit(next_digit),
-    .square_out(square_out)
+    .out_signal(out_signal),
+    .out_digits(out_digits),
+    .out_freq_value(freq_value)
 );
 
-// Clock generation
+// 100 MHz clock, T = 10 ns
 initial begin
-    clk = 0;
-    forever #5 clk = ~clk; // Generate 100 MHz clock: period = 10 ns, toggle every 5 ns
+    clk = 1'b0;
+    forever #5 clk = ~clk;
 end
 
-// Test sequence
 initial begin
-    $dumpfile("sim/top_squaregenerator.vcd"); // Create a VCD file for waveform viewing
-    $dumpvars(0, tb_top); // Dump all variables in the testbench
 
-    // Initialize inputs
-    btn_up = 0;
-    btn_down = 0;
-    next_digit = 0;
-    #100; // Wait for 100 ns
-    // Simulate button presses to set frequency to 1234567 Hz
-    // Set digit 0 to 7
-    // Digit 0 
-    next_digit = 0; btn_up = 1; #11000000; btn_up = 1; btn_down = 1; #20000000; btn_down = 0; btn_up = 0; #20000000; // Increment digit 0 to 7
-    // Set digit 1 to 6
-    next_digit = 1; #20000000; // Move to digit 1
-    next_digit = 0; btn_up = 1; #20000000; btn_up = 0; #15000000; // Increment digit 1 to 6
-    // Set digit 2 to 5
-    next_digit = 1; #20000000; // Move to digit 2
-    next_digit = 0; btn_up = 1; #14000000; btn_up = 0; #20000000; btn_up = 1; #20000000; btn_up = 0; #20000000; // Increment digit 2 to 5
-    // Set digit 3 to 4
-    next_digit = 1; #20000000; // Move to digit 3
-    next_digit = 0; btn_up = 1; #20000000; btn_up = 0; #22000000; // Increment digit 3 to 4
-    // Set digit 4 to 3
-    next_digit = 1; #20000000; // Move to digit 4
-    next_digit = 0; btn_up = 1; #20000000; btn_up = 0; #20000000; btn_up = 1; #20000000; btn_up = 0; #20000000; // Increment digit 4 to 3
-    // Set digit 5 to 2
-    next_digit = 1; #20000000; // Move to digit 5     
-    next_digit = 0; btn_up = 1; #28000000; btn_up = 0; #20000000; // Increment digit 5 to 2
-    // Set digit 6 to 1
-    next_digit = 1; #12000000; // Move to digit 6
-    next_digit = 0; btn_up = 1; #25000000; btn_up = 0; #20000000; btn_up = 1; btn_down = 1; #20000000; btn_down = 0; btn_up = 0; #20000000; btn_up = 1; #20000000; btn_up = 0; #20000000; // Increment digit 6 to 1
-    // Wait for some time to observe the output
-    #10000000; // Wait for 1 us
-    $monitor("Time: %0t, square_out: %b", $time, square_out); // Monitor the output signal
-    $finish; // End the simulation      
-end
+    // VCD
+    $dumpfile("sim/top_squaregenerator.vcd");
+    $dumpvars(0, tb_top);
+
+    // Initial values
+    nrst = 1'b0;
+    btn_up = 1'b0;
+    btn_down = 1'b0;
+    next_digit = 1'b0;
+
+    temp_freq_value = freq_value;
+    square_wave_out = out_signal;
+
+    dig0 = out_digits[0];
+    dig1 = out_digits[1];
+    dig2 = out_digits[2];
+    dig3 = out_digits[3];
+    dig4 = out_digits[4];
+    dig5 = out_digits[5];
+    dig6 = out_digits[6];
+
+    // Reset
+    #100;
+
+    nrst = 1'b1;
+    temp_freq_value = freq_value;
+    square_wave_out = out_signal;
+
+    dig0 = out_digits[0];
+    dig1 = out_digits[1];
+    dig2 = out_digits[2];
+    dig3 = out_digits[3];
+    dig4 = out_digits[4];
+    dig5 = out_digits[5];
+    dig6 = out_digits[6];
+
+    // =====================================
+    // Test button presses
+    // =====================================
+    #11_000_000;
+
+
+    // Move to the next digit (digits[1])
+    next_digit = 1'b1;
+    #11_000_000;
+    next_digit = 1'b0;
+    #11_000_000;
+    temp_freq_value = freq_value;
+    square_wave_out = out_signal;
+
+    dig0 = out_digits[0];
+    dig1 = out_digits[1];
+    dig2 = out_digits[2];
+    dig3 = out_digits[3];
+    dig4 = out_digits[4];
+    dig5 = out_digits[5];
+    dig6 = out_digits[6];
+
+    // Increment the fourth digit (digits[3]) - 2001 Hz
+    next_digit = 1'b1;
+    #11_000_000;
+    next_digit = 1'b0;
+    #11_000_000;
+    temp_freq_value = freq_value;
+    square_wave_out = out_signal;
+
+    dig0 = out_digits[0];
+    dig1 = out_digits[1];
+    dig2 = out_digits[2];
+    dig3 = out_digits[3];
+    dig4 = out_digits[4];
+    dig5 = out_digits[5];
+    dig6 = out_digits[6];
+
+    next_digit = 1'b1;
+    #11_000_000;
+    next_digit = 1'b0;
+    #11_000_000;
+    temp_freq_value = freq_value;
+    square_wave_out = out_signal;
+
+    dig0 = out_digits[0];
+    dig1 = out_digits[1];
+    dig2 = out_digits[2];
+    dig3 = out_digits[3];
+    dig4 = out_digits[4];
+    dig5 = out_digits[5];
+    dig6 = out_digits[6];
+
+    btn_up = 1'b1;
+    #11_000_000;
+    btn_up = 1'b0;
+    #11_000_000;
+    temp_freq_value = freq_value;
+    square_wave_out = out_signal;
+
+    dig0 = out_digits[0];
+    dig1 = out_digits[1];
+    dig2 = out_digits[2];
+    dig3 = out_digits[3];
+    dig4 = out_digits[4];
+    dig5 = out_digits[5];
+    dig6 = out_digits[6];
     
+    btn_up = 1'b1;
+    #11_000_000;
+    btn_up = 1'b0;
+    #11_000_000;
+    temp_freq_value = freq_value;
+    square_wave_out = out_signal;
+
+    dig0 = out_digits[0];
+    dig1 = out_digits[1];
+    dig2 = out_digits[2];
+    dig3 = out_digits[3];
+    dig4 = out_digits[4];
+    dig5 = out_digits[5];
+    dig6 = out_digits[6];
+
+    // Reset
+    #100;
+    nrst = 1'b0;
+    #100;
+    nrst = 1'b1;
+    #100;
+    temp_freq_value = freq_value;
+    square_wave_out = out_signal;
+
+    dig0 = out_digits[0];
+    dig1 = out_digits[1];
+    dig2 = out_digits[2];
+    dig3 = out_digits[3];
+    dig4 = out_digits[4];
+    dig5 = out_digits[5];
+    dig6 = out_digits[6];
+
+    // Decrement the fifth digit (digits[3]) - without Reset, with Reset decrement the second digit (digits[1]) - 2091 Hz 
+    next_digit = 1'b1;
+    #11_000_000;
+    next_digit = 1'b0;
+    #11_000_000;
+    temp_freq_value = freq_value;
+    square_wave_out = out_signal;
+
+    dig0 = out_digits[0];
+    dig1 = out_digits[1];
+    dig2 = out_digits[2];
+    dig3 = out_digits[3];
+    dig4 = out_digits[4];
+    dig5 = out_digits[5];
+    dig6 = out_digits[6];
+
+    btn_down = 1'b1;
+    #11_000_000;
+    btn_down = 1'b0;
+    #11_000_000;
+    temp_freq_value = freq_value;
+    square_wave_out = out_signal;
+
+    dig0 = out_digits[0];
+    dig1 = out_digits[1];
+    dig2 = out_digits[2];
+    dig3 = out_digits[3];
+    dig4 = out_digits[4];
+    dig5 = out_digits[5];
+    dig6 = out_digits[6];
+
+    #11_000_000;
+    
+    $finish;
+end
+
+initial begin 
+    $monitor("Time: %0t | nrst: %b | btn_up: %b | btn_down: %b | next_digit: %b | digits: [%d, %d, %d, %d, %d, %d, %d] | freq_value: %d | out_signal: %b", 
+        $time, nrst, btn_up, btn_down, next_digit, out_digits[0], out_digits[1], out_digits[2], out_digits[3], out_digits[4], out_digits[5], out_digits[6], freq_value, out_signal);
+end
+
+always @(posedge clk) begin
+    if ($time < 200) begin
+        $display(
+            "t=%0t rst=%b encoder digits=%d %d %d %d %d %d %d",
+            $time,
+            nrst,
+            uut.button_controller_inst.encoder.digits[0],
+            uut.button_controller_inst.encoder.digits[1],
+            uut.button_controller_inst.encoder.digits[2],
+            uut.button_controller_inst.encoder.digits[3],
+            uut.button_controller_inst.encoder.digits[4],
+            uut.button_controller_inst.encoder.digits[5],
+            uut.button_controller_inst.encoder.digits[6]
+        );
+    end
+end
+
 endmodule
