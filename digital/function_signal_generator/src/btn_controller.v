@@ -3,7 +3,7 @@ module btn_controller (
     input btn_up,
     input btn_down,
     input next_digit,
-    output reg [3:0] bcd_digits [6:0]
+    output wire [3:0] bcd_digits [6:0]
 );
 
 wire btn_up_pulse, btn_down_pulse, next_digit_pulse;
