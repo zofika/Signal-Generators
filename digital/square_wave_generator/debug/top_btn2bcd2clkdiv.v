@@ -1,19 +1,16 @@
-module top_squaregenerator (
+module top_btn2bcd2clkdiv (
     input clk,
     input rstn,
     input btn_up,
     input btn_down,
     input next_digit,
-    
-    output out_signal,
-    output [6:0] seg,
-    output [6:0] an
+    output square_out
 );
 
 wire [3:0] digits [6:0]; // 7 BCD digits for frequency input
 wire [19:0] freq_value; // 20-bit frequency value
 
-button_controller button_controller_inst (
+button_encoder button_enc_inst (
     .clk(clk),
     .nrst(rstn),
     .btn_up(btn_up),
@@ -23,24 +20,15 @@ button_controller button_controller_inst (
 );
 
 bcd2dec_converter bcd2dec_inst (
-    .nrst(rstn),
     .digits(digits),
     .freq_value(freq_value)
 );
 
-clock_divider clk_div_inst (
+clock_divider clock_divider_inst (
     .clk(clk),
     .rstn(rstn),
     .freq_value(freq_value),
-    .signal_out(out_signal)
-);
-
-display_decoder display_decoder_inst (
-    .clk(clk),
-    .nrst(rstn),
-    .digits(digits),
-    .seg(seg),
-    .an(an)
+    .signal_out(square_out)
 );
 
 endmodule
