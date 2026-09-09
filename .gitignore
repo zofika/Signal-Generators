@@ -22,4 +22,3 @@ build/
 digital/square_wave_generator/sim/top_squaregenerator.vcd
 sim/
 /digital/square_wave_generator/sim
-digital/function_signal_generator/src/top_squaregenerator.v
