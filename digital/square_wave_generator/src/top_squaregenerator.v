@@ -7,10 +7,7 @@ module top_squaregenerator (
     
     output out_signal,
     output [6:0] seg,
-    output [6:0] an,
-
-    output [3:0] out_digits [6:0], // 7 BCD digits for frequency input  
-    output [19:0] out_freq_value
+    output [6:0] an
 );
 
 wire [3:0] digits [6:0]; // 7 BCD digits for frequency input
@@ -45,15 +42,5 @@ display_decoder display_decoder_inst (
     .seg(seg),
     .an(an)
 );
-
-assign out_freq_value = freq_value;
-
-assign out_digits[0] = digits[0];
-assign out_digits[1] = digits[1];
-assign out_digits[2] = digits[2];       
-assign out_digits[3] = digits[3];
-assign out_digits[4] = digits[4];
-assign out_digits[5] = digits[5];
-assign out_digits[6] = digits[6];
 
 endmodule

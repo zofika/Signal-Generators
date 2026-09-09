@@ -8,24 +8,9 @@ reg btn_up;
 reg btn_down;
 reg next_digit;
 
-wire [3:0] out_digits [6:0]; // 7 BCD digits for frequency input
-
 wire out_signal;
-wire seg [6:0];
-wire an [6:0];
-
-wire [19:0] freq_value;
-
-reg square_wave_out;
-reg [19:0] temp_freq_value;
-
-reg [3:0] dig0;
-reg [3:0] dig1;
-reg [3:0] dig2;
-reg [3:0] dig3;
-reg [3:0] dig4;
-reg [3:0] dig5;
-reg [3:0] dig6;
+wire [6:0] seg;
+wire [6:0] an;
 
 top_squaregenerator uut (
     .clk(clk),
@@ -34,8 +19,8 @@ top_squaregenerator uut (
     .btn_down(btn_down),
     .next_digit(next_digit),
     .out_signal(out_signal),
-    .out_digits(out_digits),
-    .out_freq_value(freq_value)
+    .seg(seg),
+    .an(an)
 );
 
 // 100 MHz clock, T = 10 ns
@@ -56,31 +41,10 @@ initial begin
     btn_down = 1'b0;
     next_digit = 1'b0;
 
-    temp_freq_value = freq_value;
-    square_wave_out = out_signal;
-
-    dig0 = out_digits[0];
-    dig1 = out_digits[1];
-    dig2 = out_digits[2];
-    dig3 = out_digits[3];
-    dig4 = out_digits[4];
-    dig5 = out_digits[5];
-    dig6 = out_digits[6];
-
     // Reset
     #100;
 
     nrst = 1'b1;
-    temp_freq_value = freq_value;
-    square_wave_out = out_signal;
-
-    dig0 = out_digits[0];
-    dig1 = out_digits[1];
-    dig2 = out_digits[2];
-    dig3 = out_digits[3];
-    dig4 = out_digits[4];
-    dig5 = out_digits[5];
-    dig6 = out_digits[6];
 
     // =====================================
     // Test button presses
@@ -93,77 +57,27 @@ initial begin
     #11_000_000;
     next_digit = 1'b0;
     #11_000_000;
-    temp_freq_value = freq_value;
-    square_wave_out = out_signal;
-
-    dig0 = out_digits[0];
-    dig1 = out_digits[1];
-    dig2 = out_digits[2];
-    dig3 = out_digits[3];
-    dig4 = out_digits[4];
-    dig5 = out_digits[5];
-    dig6 = out_digits[6];
-
+    
     // Increment the fourth digit (digits[3]) - 2001 Hz
     next_digit = 1'b1;
     #11_000_000;
     next_digit = 1'b0;
     #11_000_000;
-    temp_freq_value = freq_value;
-    square_wave_out = out_signal;
-
-    dig0 = out_digits[0];
-    dig1 = out_digits[1];
-    dig2 = out_digits[2];
-    dig3 = out_digits[3];
-    dig4 = out_digits[4];
-    dig5 = out_digits[5];
-    dig6 = out_digits[6];
 
     next_digit = 1'b1;
     #11_000_000;
     next_digit = 1'b0;
     #11_000_000;
-    temp_freq_value = freq_value;
-    square_wave_out = out_signal;
-
-    dig0 = out_digits[0];
-    dig1 = out_digits[1];
-    dig2 = out_digits[2];
-    dig3 = out_digits[3];
-    dig4 = out_digits[4];
-    dig5 = out_digits[5];
-    dig6 = out_digits[6];
-
-    btn_up = 1'b1;
-    #11_000_000;
-    btn_up = 1'b0;
-    #11_000_000;
-    temp_freq_value = freq_value;
-    square_wave_out = out_signal;
-
-    dig0 = out_digits[0];
-    dig1 = out_digits[1];
-    dig2 = out_digits[2];
-    dig3 = out_digits[3];
-    dig4 = out_digits[4];
-    dig5 = out_digits[5];
-    dig6 = out_digits[6];
     
     btn_up = 1'b1;
     #11_000_000;
     btn_up = 1'b0;
     #11_000_000;
-    temp_freq_value = freq_value;
-    square_wave_out = out_signal;
-
-    dig0 = out_digits[0];
-    dig1 = out_digits[1];
-    dig2 = out_digits[2];
-    dig3 = out_digits[3];
-    dig4 = out_digits[4];
-    dig5 = out_digits[5];
-    dig6 = out_digits[6];
+    
+    btn_up = 1'b1;
+    #11_000_000;
+    btn_up = 1'b0;
+    #11_000_000;
 
     // Reset
     #100;
@@ -171,47 +85,17 @@ initial begin
     #100;
     nrst = 1'b1;
     #100;
-    temp_freq_value = freq_value;
-    square_wave_out = out_signal;
-
-    dig0 = out_digits[0];
-    dig1 = out_digits[1];
-    dig2 = out_digits[2];
-    dig3 = out_digits[3];
-    dig4 = out_digits[4];
-    dig5 = out_digits[5];
-    dig6 = out_digits[6];
-
+    
     // Decrement the fifth digit (digits[3]) - without Reset, with Reset decrement the second digit (digits[1]) - 2091 Hz 
     next_digit = 1'b1;
     #11_000_000;
     next_digit = 1'b0;
     #11_000_000;
-    temp_freq_value = freq_value;
-    square_wave_out = out_signal;
-
-    dig0 = out_digits[0];
-    dig1 = out_digits[1];
-    dig2 = out_digits[2];
-    dig3 = out_digits[3];
-    dig4 = out_digits[4];
-    dig5 = out_digits[5];
-    dig6 = out_digits[6];
 
     btn_down = 1'b1;
     #11_000_000;
     btn_down = 1'b0;
     #11_000_000;
-    temp_freq_value = freq_value;
-    square_wave_out = out_signal;
-
-    dig0 = out_digits[0];
-    dig1 = out_digits[1];
-    dig2 = out_digits[2];
-    dig3 = out_digits[3];
-    dig4 = out_digits[4];
-    dig5 = out_digits[5];
-    dig6 = out_digits[6];
 
     #11_000_000;
     
@@ -219,11 +103,11 @@ initial begin
 end
 
 initial begin 
-    $monitor("Time: %0t | nrst: %b | btn_up: %b | btn_down: %b | next_digit: %b | digits: [%d, %d, %d, %d, %d, %d, %d] | freq_value: %d | out_signal: %b", 
-        $time, nrst, btn_up, btn_down, next_digit, out_digits[0], out_digits[1], out_digits[2], out_digits[3], out_digits[4], out_digits[5], out_digits[6], freq_value, out_signal);
+    $monitor("Time: %0t | nrst: %b | btn_up: %b | btn_down: %b | next_digit: %b | out_signal: %b", 
+        $time, nrst, btn_up, btn_down, next_digit, out_signal);
 end
 
-always @(posedge clk) begin
+/*always @(posedge clk) begin
     if ($time < 200) begin
         $display(
             "t=%0t rst=%b encoder digits=%d %d %d %d %d %d %d",
@@ -238,6 +122,6 @@ always @(posedge clk) begin
             uut.button_controller_inst.encoder.digits[6]
         );
     end
-end
+end*/
 
 endmodule
